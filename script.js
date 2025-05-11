@@ -1,13 +1,24 @@
+// frontend/script.js
+
 document.addEventListener('DOMContentLoaded', () => {
     const body = document.body;
-    const container = document.querySelector('.container'); // Get container
-    const sidebar = document.querySelector('.sidebar'); // Get sidebar
+    const container = document.querySelector('.container');
+    const sidebar = document.querySelector('.sidebar');
     const themeSwitchButton = document.getElementById('theme-switch');
     const langSwitchButton = document.getElementById('lang-switch');
     const chatInput = document.getElementById('chat-input');
     const sendButton = document.getElementById('send-button');
     const chatArea = document.querySelector('.chat-area');
     const disclaimer = document.querySelector('.disclaimer');
+    const sidebarToggleButton = document.getElementById('sidebar-toggle');
+
+
+    // --- API Configuration ---
+    // IMPORTANT: This is the n8n webhook URL.
+    // Ensure your n8n workflow is set up to receive a POST request
+    // with a JSON body like { "prompt": "your message" } and
+    // respond with JSON containing a "response" field.
+    const API_URL = 'https://cofe-code.duckdns.org/160cf466/webhook/caebaaaa-3b30-4ace-9970-b756538f81fb';
 
     // --- Theme Switching ---
     const currentTheme = localStorage.getItem('theme') || 'dark-mode';
@@ -17,12 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
     themeSwitchButton.addEventListener('click', () => {
         const isDarkMode = body.classList.contains('dark-mode');
         const newTheme = isDarkMode ? 'light-mode' : 'dark-mode';
-        body.className = newTheme; // Change class
-        localStorage.setItem('theme', newTheme); // Save preference
-        updateThemeButtonIcon(newTheme); // Update icon
-        // Optional: Trigger a slight animation on the body or container
-        // container.classList.add('theme-change-anim');
-        // setTimeout(() => container.classList.remove('theme-change-anim'), 500); // Needs CSS animation
+        body.className = newTheme;
+        localStorage.setItem('theme', newTheme);
+        updateThemeButtonIcon(newTheme);
     });
 
     function updateThemeButtonIcon(theme) {
@@ -30,244 +38,248 @@ document.addEventListener('DOMContentLoaded', () => {
         iconSpan.textContent = theme === 'dark-mode' ? '🌙' : '☀️';
     }
 
-
     // --- Language Switching ---
     let currentLang = localStorage.getItem('lang') || 'fa';
     applyLanguage(currentLang);
 
     langSwitchButton.addEventListener('click', () => {
-        // Get the *next* language from the button's data attribute
         const nextLang = langSwitchButton.getAttribute('data-lang');
         applyLanguage(nextLang);
     });
 
     function applyLanguage(lang) {
         document.documentElement.lang = lang;
-        document.documentElement.dir = (lang === 'fa') ? 'rtl' : 'ltr';
+        body.style.setProperty('--dir', lang === 'fa' ? 'rtl' : 'ltr');
+        body.style.setProperty('--text-align', lang === 'fa' ? 'right' : 'left');
 
-        // Update button text and data-lang attribute for the *next* click
         if (lang === 'fa') {
-            langSwitchButton.querySelector('.text').textContent = langSwitchButton.getAttribute('data-en'); // Show 'English'
-            langSwitchButton.setAttribute('data-lang', 'en'); // Next click will switch to English
-        } else { // lang === 'en'
-            langSwitchButton.querySelector('.text').textContent = langSwitchButton.getAttribute('data-fa'); // Show 'فارسی'
-            langSwitchButton.setAttribute('data-lang', 'fa'); // Next click will switch to Persian
+            langSwitchButton.querySelector('.text').textContent = langSwitchButton.getAttribute('data-en');
+            langSwitchButton.setAttribute('data-lang', 'en');
+        } else {
+            langSwitchButton.querySelector('.text').textContent = langSwitchButton.getAttribute('data-fa');
+            langSwitchButton.setAttribute('data-lang', 'fa');
         }
 
-        // Update all elements with data-en and data-fa attributes
         document.querySelectorAll('[data-en], [data-fa]').forEach(element => {
             const text = element.getAttribute('data-' + lang);
             if (text) {
-                 // Update text for elements that don't have internal spans (like new chat button icon)
                  if (element.classList.contains('new-chat-button') && element.querySelector('.text')) {
                      element.querySelector('.text').textContent = text;
                  } else if (element.tagName === 'BUTTON' && element.querySelector('.icon')) {
                     // Skip buttons with icons and text spans already handled
                  }
                  else {
-                     // For other elements, just update textContent
                      element.textContent = text;
                  }
             }
         });
 
-         // Update placeholders using the specific data attributes
         chatInput.placeholder = chatInput.getAttribute('data-' + lang + '-placeholder') || '';
         disclaimer.textContent = disclaimer.getAttribute('data-' + lang) || '';
 
+        if (sidebarToggleButton && sidebarToggleButton.hasAttribute('data-' + lang + '-text')) {
+             sidebarToggleButton.textContent = sidebarToggleButton.getAttribute('data-' + lang + '-text');
+        }
+
 
         localStorage.setItem('lang', lang);
-
-        // Optional: Re-render or update dynamic content if needed based on language
     }
 
 
-    // --- Handling Sending Messages and AI Response ---
+    // --- Handling Sending Messages and AI Response (API Connected) ---
 
-    let messageIndex = 0; // Counter for message animation delay
+    let messageIndex = 0;
+    let typingIndicatorElement = null;
 
-    function sendMessage() {
+    async function sendMessage() {
         const messageText = chatInput.value.trim();
         if (messageText === '') {
             return;
         }
 
-        // Disable input and button
         chatInput.disabled = true;
         sendButton.disabled = true;
-        sendButton.style.opacity = '0.8'; // Indicate disabled state visually
+        sendButton.style.opacity = '0.8';
         sendButton.style.cursor = 'not-allowed';
 
-
-        // Add user message
         addMessage(messageText, 'user');
 
-        // Show typing indicator
-        const typingIndicator = addTypingIndicator();
-
-        // Simulate AI response
-        simulateAiResponse(messageText, typingIndicator);
-
-        // Clear and reset input
         chatInput.value = '';
         adjustTextareaHeight();
-        scrollToBottom(); // Scroll immediately after sending user message
+
+        scrollToBottom();
+
+        typingIndicatorElement = addTypingIndicator();
+        scrollToBottom();
+
+        try {
+            // Using fetch to send a POST request to the n8n webhook URL
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // Sending the message as a JSON body with a 'prompt' field
+                body: JSON.stringify({ prompt: messageText }),
+            });
+
+            // The rest of this block is similar to your original fetch handling
+            if (!response.ok) {
+                // Attempt to read error details from the response body if available
+                const errorDetails = await response.text().catch(() => 'No error details available');
+                throw new Error(`API responded with status ${response.status}. Details: ${errorDetails.substring(0, 200)}...`); // Limit error message length
+            }
+
+            const data = await response.json();
+            // Expecting the n8n workflow to return a JSON object with a 'response' field
+            const aiResponseText = data.response;
+
+            if (typeof aiResponseText !== 'string') {
+                 // If the n8n response doesn't have the expected format
+                 throw new Error('Invalid response format from n8n: "response" field is missing or not a string.');
+            }
+
+            removeTypingIndicator(typingIndicatorElement);
+            typingIndicatorElement = null;
+
+            addMessage(aiResponseText, 'ai');
+
+        } catch (error) {
+            console.error('Error fetching response from API:', error);
+
+            if (typingIndicatorElement) {
+                 removeTypingIndicator(typingIndicatorElement);
+                 typingIndicatorElement = null;
+            }
+
+            const errorPromptText = document.documentElement.lang === 'fa' ? 'خطا:' : 'Error:';
+            // Display a user-friendly error message
+            addMessage(`${errorPromptText} ${error.message || 'An unknown error occurred while contacting the AI.'}`, 'error');
+
+        } finally {
+            // Re-enable input and button
+            chatInput.disabled = false;
+            sendButton.disabled = false;
+            sendButton.style.opacity = '';
+            sendButton.style.cursor = '';
+
+            chatInput.focus();
+            scrollToBottom();
+        }
     }
 
     function addMessage(text, sender) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message', `${sender}-message`);
+        if(sender === 'error') {
+             messageDiv.classList.add('error-message');
+        }
 
-        // Set CSS variable for animation delay
-        messageDiv.style.setProperty('--message-index', ++messageIndex);
+        // Reset message index for errors, increment for regular messages
+        if(sender !== 'error') {
+            messageIndex++;
+            messageDiv.style.setProperty('--message-index', messageIndex);
+        } else {
+             messageIndex = 0; // Or handle error messages differently if needed
+        }
 
 
         const avatarDiv = document.createElement('div');
         avatarDiv.classList.add('message-avatar');
-        // Use a simple letter or icon representation
-        avatarDiv.textContent = (sender === 'user' ? 'You' : 'AI');
-
+        avatarDiv.textContent = (sender === 'user' ? (document.documentElement.lang === 'fa' ? 'شما' : 'You') : (sender === 'ai' ? 'AI' : '!'));
 
         const bubbleDiv = document.createElement('div');
         bubbleDiv.classList.add('message-bubble');
-        bubbleDiv.textContent = text; // Use textContent for safety
-
+        bubbleDiv.textContent = text; // Use textContent for security
 
         messageDiv.appendChild(avatarDiv);
         messageDiv.appendChild(bubbleDiv);
 
         chatArea.appendChild(messageDiv);
 
-        // Wait for the message element to be added to the DOM before potentially scrolling or animating
-        // Using a small timeout allows the browser to render the element
-         requestAnimationFrame(() => {
-             scrollToBottom(); // Scroll after message is added and animation starts
-         });
-
-         return messageDiv; // Return the message element
+         return messageDiv;
     }
 
     function addTypingIndicator() {
          const typingDiv = document.createElement('div');
-         typingDiv.classList.add('message', 'ai-message', 'typing-indicator');
+         typingDiv.classList.add('message', 'ai-message', 'typing-indicator'); // Added typing-indicator class
 
          const avatarDiv = document.createElement('div');
          avatarDiv.classList.add('message-avatar');
-         avatarDiv.textContent = 'AI'; // Basic AI avatar
+         avatarDiv.textContent = 'AI'; // Consistent avatar for typing
 
          const bubbleDiv = document.createElement('div');
          bubbleDiv.classList.add('message-bubble');
-         bubbleDiv.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>'; // Dots for animation
+         // Simple animated dots for typing
+         bubbleDiv.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
 
          typingDiv.appendChild(avatarDiv);
          typingDiv.appendChild(bubbleDiv);
          chatArea.appendChild(typingDiv);
 
-         scrollToBottom(); // Scroll to show indicator
+         scrollToBottom();
 
-         return typingDiv; // Return the indicator element
+         return typingDiv; // Return the created element so it can be removed
     }
 
     function removeTypingIndicator(indicatorElement) {
-         if (indicatorElement && indicatorElement.parentElement) {
-             indicatorElement.parentElement.removeChild(indicatorElement);
+         // Check if the element exists and is still in the DOM before trying to remove it
+         if (indicatorElement && chatArea.contains(indicatorElement)) {
+             chatArea.removeChild(indicatorElement);
          }
     }
 
 
-    function simulateAiResponse(userMessage, typingIndicator) {
-        const responses_fa = [
-             "بسیار عالی! چه کمکی می‌توانم انجام دهم؟",
-             "متوجه شدم. در مورد این موضوع اطلاعات بیشتری می‌خواهید؟",
-             "پاسخ شما: این یک پاسخ آزمایشی از Cofe Code است.",
-             "سوال خوبی است! در حال پردازش هستم...",
-             "فکر می‌کنم منظور شما را متوجه شدم. بگذارید توضیح دهم."
-        ];
-         const responses_en = [
-            "Excellent! What can I help you with?",
-            "Understood. Would you like more information on this topic?",
-            "Here is your response: This is a test response from Cofe Code.",
-            "That's a great question! Processing...",
-            "I think I understand what you mean. Let me explain."
-        ];
-
-        const currentResponses = (document.documentElement.lang === 'fa') ? responses_fa : responses_en;
-        const randomResponse = currentResponses[Math.floor(Math.random() * currentResponses.length)];
-
-        // Simulate typing delay
-        const typingTime = Math.max(1000, randomResponse.length * 40); // Longer response = longer typing
-
-        setTimeout(() => {
-            removeTypingIndicator(typingIndicator); // Remove indicator first
-
-            // Reset message index counter for next message sequence
-            messageIndex = 0; // Reset counter for the AI response itself
-
-            addMessage(randomResponse, 'ai'); // Add the actual AI message
-
-            // Re-enable input and button after response
-            chatInput.disabled = false;
-            sendButton.disabled = false;
-            sendButton.style.opacity = ''; // Reset opacity
-            sendButton.style.cursor = '';
-
-            chatInput.focus(); // Put focus back on input
-            scrollToBottom();
-
-        }, typingTime); // Use calculated typing time
-    }
-
-
-    // --- Input Area Interactions ---
-
+    // --- Event Listeners ---
     sendButton.addEventListener('click', sendMessage);
 
     chatInput.addEventListener('keypress', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
+            event.preventDefault(); // Prevent default newline
             sendMessage();
         }
     });
 
     chatInput.addEventListener('input', adjustTextareaHeight);
 
+    // --- Helper Functions ---
     function adjustTextareaHeight() {
-        // Allow a short delay to ensure content is rendered before calculating
+         // Use requestAnimationFrame for better performance
          requestAnimationFrame(() => {
-             chatInput.style.height = 'auto';
+             chatInput.style.height = 'auto'; // Reset height to get actual scroll height
              chatInput.style.height = chatInput.scrollHeight + 'px';
-             // Optional: Add max height check if needed
          });
     }
 
-     // Scroll chat area to the bottom smoothly
     function scrollToBottom() {
-        chatArea.scrollTo({
-            top: chatArea.scrollHeight,
-            behavior: 'smooth' // Smooth scroll
-        });
+        // Use requestAnimationFrame and smooth behavior
+         requestAnimationFrame(() => {
+            chatArea.scrollTo({
+                top: chatArea.scrollHeight,
+                behavior: 'smooth'
+            });
+         });
     }
 
-    // --- Sidebar Toggle (for mobile) ---
-    // You need to add a button in HTML to trigger this
-    // Example button: <button id="sidebar-toggle">☰</button>
-    const sidebarToggleButton = document.getElementById('sidebar-toggle'); // Assume this button exists
-
+    // --- Sidebar Toggle ---
     if (sidebarToggleButton) {
          sidebarToggleButton.addEventListener('click', () => {
              sidebar.classList.toggle('expanded');
-             // You might also want to add an overlay on main-content when sidebar is expanded
-             // to prevent interaction with chat area
          });
+         // Ensure language is applied to the toggle button on load
+         applyLanguage(currentLang);
     }
 
 
     // --- Initial Setup ---
-    // Wait for requestAnimationFrame to ensure initial layout is complete
+     // Apply initial adjustments after DOM is loaded
      requestAnimationFrame(() => {
-         adjustTextareaHeight(); // Adjust height on page load
-         scrollToBottom(); // Scroll to bottom on page load (if any messages)
+         adjustTextareaHeight();
+         scrollToBottom();
      });
 
+     // Apply initial language settings
+     body.style.setProperty('--dir', currentLang === 'fa' ? 'rtl' : 'ltr');
+     body.style.setProperty('--text-align', currentLang === 'fa' ? 'right' : 'left');
 
 });
