@@ -1,0 +1,675 @@
+/* Basic Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Vazirmatn', sans-serif; /* Default Persian Font */
+    line-height: 1.7; /* Slightly increased line height for readability */
+    transition: background-color 0.5s ease, color 0.5s ease; /* Smoother theme transition */
+    color: var(--text-color); /* Apply text color from variables */
+    background-color: var(--bg-color); /* Apply background color from variables */
+    overflow: hidden; /* Prevent body scroll, let container handle it */
+}
+
+/* CSS Variables for Themes - More refined colors */
+:root {
+    /* Light Mode Colors (inspired by coffee, clean UI) */
+    --light-bg: #f4f0eb; /* Warm light background */
+    --light-text: #3d3a36; /* Dark coffee text */
+    --light-sidebar-bg: #e2ddd7; /* Lighter coffee tone sidebar */
+    --light-sidebar-text: #5f5b57; /* Medium coffee text */
+    --light-input-bg: #ffffff; /* Pure white input */
+    --light-input-border: #c0bdb8; /* Subtle border */
+    --light-button-bg: linear-gradient(45deg, #ff9800, #f57c00); /* Orange gradient */
+    --light-button-text: #ffffff;
+    --light-chat-bubble-user-bg: linear-gradient(45deg, #007bff, #0056b3); /* Blue gradient */
+    --light-chat-bubble-user-text: #ffffff;
+    --light-chat-bubble-ai-bg: #ffffff; /* White bubble */
+    --light-chat-bubble-ai-text: #3d3a36; /* Dark text */
+    --light-border-color: #d0cdca; /* Divider color */
+    --light-hover-bg: #cdc8c2; /* Subtle hover background */
+    --light-active-bg: #bab5b0; /* Active background */
+    --light-scrollbar-thumb: #a8a39e;
+    --light-scrollbar-track: #e2ddd7;
+    --light-shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode {
+    --bg-color: var(--light-bg);
+    --text-color: var(--light-text);
+    --sidebar-bg: var(--light-sidebar-bg);
+    --sidebar-text: var(--light-sidebar-text);
+    --input-bg: var(--light-input-bg);
+    --input-border: var(--light-input-border);
+    --button-bg: var(--light-button-bg);
+    --button-text: var(--light-button-text);
+    --chat-bubble-user-bg: var(--light-chat-bubble-user-bg);
+    --chat-bubble-user-text: var(--light-chat-bubble-user-text);
+    --chat-bubble-ai-bg: var(--light-chat-bubble-ai-bg);
+    --chat-bubble-ai-text: var(--light-chat-bubble-ai-text);
+    --border-color: var(--light-border-color);
+    --hover-bg: var(--light-hover-bg);
+    --active-bg: var(--light-active-bg);
+    --scrollbar-thumb: var(--light-scrollbar-thumb);
+    --scrollbar-track: var(--light-scrollbar-track);
+    --shadow-color: var(--light-shadow-color);
+}
+
+/* Dark Mode Colors (inspired by dark mode coffee shops) */
+:root {
+    --dark-bg: #2c2b29; /* Dark coffee background */
+    --dark-text: #ece8e4; /* Light text */
+    --dark-sidebar-bg: #1e1d1c; /* Very dark sidebar */
+    --dark-sidebar-text: #b5b0ab; /* Muted text */
+    --dark-input-bg: #3a3937; /* Slightly lighter dark input */
+    --dark-input-border: #4d4b49; /* Subtle border */
+    --dark-button-bg: linear-gradient(45deg, #ff9800, #f57c00); /* Same orange gradient */
+    --dark-button-text: #ffffff;
+    --dark-chat-bubble-user-bg: linear-gradient(45deg, #565869, #40414f); /* Darker blue/grey gradient */
+    --dark-chat-bubble-user-text: #ece8e4;
+    --dark-chat-bubble-ai-bg: #3a3937; /* AI bubble matches input */
+    --dark-chat-bubble-ai-text: #ece8e4;
+    --dark-border-color: #4d4b49; /* Divider color */
+    --dark-hover-bg: #3a3937; /* Slightly lighter dark hover */
+    --dark-active-bg: #4d4b49; /* Active background */
+    --dark-scrollbar-thumb: #5a5957;
+    --dark-scrollbar-track: #2c2b29;
+    --dark-shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode {
+    --bg-color: var(--dark-bg);
+    --text-color: var(--dark-text);
+    --sidebar-bg: var(--dark-sidebar-bg);
+    --sidebar-text: var(--dark-sidebar-text);
+    --input-bg: var(--dark-input-bg);
+    --input-border: var(--dark-input-border);
+    --button-bg: var(--dark-button-bg);
+    --button-text: var(--dark-button-text);
+    --chat-bubble-user-bg: var(--dark-chat-bubble-user-bg);
+    --chat-bubble-user-text: var(--dark-chat-bubble-user-text);
+    --chat-bubble-ai-bg: var(--dark-chat-bubble-ai-bg);
+    --chat-bubble-ai-text: var(--dark-chat-bubble-ai-text);
+    --border-color: var(--dark-border-color);
+    --hover-bg: var(--dark-hover-bg);
+    --active-bg: var(--dark-active-bg);
+    --scrollbar-thumb: var(--dark-scrollbar-thumb);
+    --scrollbar-track: var(--dark-scrollbar-track);
+     --shadow-color: var(--dark-shadow-color);
+}
+
+
+/* Container and Layout */
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100vw; /* Use full viewport width */
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 280px; /* Slightly wider sidebar */
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    padding: 15px; /* Increased padding */
+    border-inline-end: 1px solid var(--border-color);
+    overflow-y: auto;
+    flex-shrink: 0;
+    transition: width 0.3s ease; /* Smooth sidebar resize if implemented */
+    box-shadow: 2px 0 8px var(--shadow-color); /* Subtle shadow */
+}
+
+/* Custom Scrollbar - More refined */
+.sidebar::-webkit-scrollbar,
+.chat-area::-webkit-scrollbar,
+.input-area textarea::-webkit-scrollbar {
+    width: 8px; /* Standard width */
+    height: 8px; /* For horizontal if needed */
+}
+
+.sidebar::-webkit-scrollbar-track,
+.chat-area::-webkit-scrollbar-track,
+.input-area textarea::-webkit-scrollbar-track {
+    background: var(--scrollbar-track);
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb,
+.chat-area::-webkit-scrollbar-thumb,
+.input-area textarea::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover,
+.chat-area::-webkit-scrollbar-thumb:hover,
+.input-area textarea::-webkit-scrollbar-thumb:hover {
+    background: #888; /* Darker on hover */
+}
+
+
+.sidebar-header {
+    padding-bottom: 15px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 15px;
+}
+
+.app-title {
+    font-size: 1.8em; /* Larger title */
+    font-weight: 700; /* Bold font */
+    margin-bottom: 15px;
+    color: var(--text-color); /* Use main text color */
+    /* Add a subtle text shadow or gradient if desired */
+    /* text-shadow: 1px 1px 3px rgba(0,0,0,0.1); */
+}
+
+
+.new-chat-button {
+    width: 100%;
+    padding: 12px; /* Increased padding */
+    background-color: var(--button-bg); /* Use gradient variable */
+    color: var(--button-text);
+    border: none; /* Remove border */
+    border-radius: 25px; /* More rounded */
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: all 0.3s ease; /* Smooth transition for all changes */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px; /* Space between icon and text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.new-chat-button:hover {
+    opacity: 0.9; /* Slight transparency on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+}
+
+.new-chat-button:active {
+    transform: translateY(0); /* Press down effect */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Smaller shadow when pressed */
+}
+
+
+.chat-list {
+    flex-grow: 1;
+    margin-bottom: 15px;
+}
+
+.chat-item {
+    padding: 12px 10px; /* Increased padding */
+    margin-bottom: 8px; /* Increased margin */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex; /* Use flex for icon/title alignment */
+    align-items: center;
+    gap: 8px; /* Space between icon and title */
+}
+
+.chat-item .chat-icon {
+    flex-shrink: 0; /* Prevent icon shrinking */
+    font-size: 1.1em;
+}
+
+.chat-item .chat-title {
+     flex-grow: 1; /* Allow title to take space */
+     overflow: hidden;
+     text-overflow: ellipsis;
+}
+
+
+.chat-item:hover {
+    background-color: var(--hover-bg);
+    transform: translateX(5px); /* Slight slide effect on hover */
+}
+
+.chat-item.active {
+    background-color: var(--active-bg);
+    font-weight: 600; /* Semi-bold for active */
+    color: var(--text-color); /* Use main text color */
+}
+
+.sidebar-footer {
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 12px; /* Increased space */
+}
+
+.sidebar-footer button {
+    width: 100%;
+    padding: 10px;
+    background-color: transparent;
+    color: var(--sidebar-text);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: start;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+    font-size: 1em;
+}
+
+.sidebar-footer button .icon {
+    flex-shrink: 0;
+    font-size: 1.3em; /* Slightly larger icon */
+    margin-inline-end: 0; /* Remove margin as gap is used */
+}
+
+.sidebar-footer button:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-color); /* Brighter text on hover */
+}
+
+
+/* Main Content Styling */
+.main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: var(--bg-color);
+}
+
+.chat-area {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Increased space between messages */
+    /* Adjust padding at the bottom for the input area wrapper */
+    padding-bottom: 150px; /* Needs to be taller than input-area-wrapper height */
+}
+
+.message {
+    display: flex;
+    align-items: flex-start;
+    opacity: 0; /* Start hidden for animation */
+    transform: translateY(20px); /* Start slightly below for animation */
+    animation: fadeInUp 0.5s ease-out forwards; /* Apply fade-in animation */
+}
+
+/* Add a delay for subsequent messages */
+.chat-area .message:nth-child(n+2) { /* Apply delay starting from the 2nd message */
+     animation-delay: calc((var(--message-index, 1) - 1) * 0.1s); /* Use JS variable for dynamic delay */
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+.message-avatar {
+    width: 35px; /* Slightly larger avatar */
+    height: 35px;
+    border-radius: 50%;
+    background-color: #ff9800; /* Cofe Code color */
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    flex-shrink: 0;
+    margin-inline-end: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    overflow: hidden; /* Clip content just in case */
+    font-size: 0.9em; /* Adjust text size in avatar */
+}
+
+.user-message .message-avatar {
+     background-color: #007bff; /* User avatar color */
+}
+
+.message-bubble {
+    max-width: 75%; /* Slightly wider bubble */
+    padding: 12px 18px; /* Increased padding */
+    border-radius: 20px; /* More rounded corners */
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    line-height: 1.6; /* Comfortable line height */
+    filter: brightness(100%); /* Ensure brightness is normal before potential animation */
+    transition: filter 0.3s ease; /* Smooth transition for potential effects */
+}
+
+.user-message .message-bubble {
+    background: var(--chat-bubble-user-bg); /* Use gradient */
+    color: var(--chat-bubble-user-text);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2); /* Subtle shadow */
+    border-bottom-inline-end-radius: 5px; /* Slightly less rounded corner on the bottom side next to avatar */
+}
+
+.ai-message .message-bubble {
+    background: var(--chat-bubble-ai-bg);
+    color: var(--chat-bubble-ai-text);
+     box-shadow: 0 3px 8px rgba(0,0,0,0.1); /* Subtle shadow */
+     border-bottom-inline-start-radius: 5px; /* Slightly less rounded corner on the bottom side next to avatar */
+}
+
+
+/* Typing Indicator Animation */
+.typing-indicator .message-bubble {
+    background: var(--chat-bubble-ai-bg); /* Same as AI bubble */
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Space between dots */
+    min-width: 50px; /* Ensure it's visible */
+    box-shadow: none; /* No shadow for typing indicator */
+}
+
+.typing-indicator .dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--chat-bubble-ai-text); /* Dot color */
+    border-radius: 50%;
+    animation: pulse 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator .dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator .dot:nth-child(2) { animation-delay: -0.16s; }
+.typing-indicator .dot:nth-child(3) { animation-delay: 0s; }
+
+@keyframes pulse {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+
+/* Input Area Wrapper Styling */
+.input-area-wrapper {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: var(--bg-color); /* Match background */
+    /* Optional: Add a gradient fade or backdrop filter for beauty */
+    /* background: linear-gradient(to top, var(--bg-color) 70%, transparent); */
+    /* backdrop-filter: blur(5px); */
+    /* -webkit-backdrop-filter: blur(5px); */
+    box-shadow: 0 -8px 15px var(--shadow-color); /* More prominent shadow */
+    z-index: 10; /* Ensure it's above chat messages */
+}
+
+
+.input-area {
+    display: flex;
+    align-items: flex-end; /* Align items to the bottom for multi-line textarea */
+    max-width: 800px; /* Limit input width */
+    margin: 0 auto; /* Center the input area */
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 28px; /* Very rounded */
+    padding: 8px 15px; /* Padding inside the input container */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Subtle shadow */
+    transition: box-shadow 0.3s ease;
+}
+
+.input-area:focus-within { /* Apply styles when children (textarea) are focused */
+    box-shadow: 0 2px 15px rgba(0, 123, 255, 0.3); /* Glow on focus */
+    border-color: #007bff;
+}
+
+
+.input-area textarea {
+    flex-grow: 1;
+    padding: 8px 0; /* Padding already handled by parent */
+    margin-inline-end: 10px; /* Space before button */
+    border: none; /* No border needed here */
+    background-color: transparent; /* Transparent background */
+    color: var(--text-color);
+    resize: none;
+    font-family: inherit;
+    font-size: 1em;
+    line-height: 1.6;
+    max-height: 150px;
+    overflow-y: auto;
+    outline: none; /* Remove default outline */
+}
+
+
+.input-area button {
+    padding: 10px; /* Square button for icon */
+    background-color: var(--button-bg); /* Use gradient */
+    color: var(--button-text);
+    border: none;
+    border-radius: 50%; /* Circular button */
+    cursor: pointer;
+    font-size: 1.2em; /* Larger icon */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0; /* Prevent shrinking */
+    transition: opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.input-area button:hover {
+    opacity: 0.9;
+}
+
+.input-area button:active {
+    transform: scale(0.9); /* More pronounced press effect */
+}
+
+.input-area button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #ccc; /* Grey out when disabled */
+    box-shadow: none;
+}
+
+
+.disclaimer {
+    margin-top: 10px; /* Space above disclaimer */
+    text-align: center;
+    font-size: 0.8em;
+    color: var(--sidebar-text);
+}
+
+
+/* ---------- RTL Support for CSS ---------- */
+body[dir="rtl"] .sidebar {
+    border-inline-end: none;
+    border-inline-start: 1px solid var(--border-color);
+    box-shadow: -2px 0 8px var(--shadow-color); /* Shadow on the left */
+}
+
+body[dir="rtl"] .message-avatar {
+     margin-inline-end: 0;
+     margin-inline-start: 15px;
+}
+
+body[dir="rtl"] .sidebar-footer button .icon {
+    margin-inline-end: 0;
+    margin-inline-start: 10px;
+}
+
+body[dir="rtl"] .input-area textarea {
+    margin-inline-end: 0;
+    margin-inline-start: 10px;
+}
+
+/* Adjust bubble corners for RTL */
+body[dir="rtl"] .user-message .message-bubble {
+     border-bottom-inline-end-radius: 20px; /* Revert this corner */
+     border-bottom-inline-start-radius: 5px; /* Make this corner less rounded */
+}
+
+body[dir="rtl"] .ai-message .message-bubble {
+     border-bottom-inline-start-radius: 20px; /* Revert this corner */
+     border-bottom-inline-end-radius: 5px; /* Make this corner less rounded */
+}
+
+/* ---------- Responsive Design Considerations (Improved) ---------- */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 60px; /* Collapse sidebar */
+        border-inline-end: none;
+        border-bottom: 1px solid var(--border-color);
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 15px;
+        overflow-x: auto; /* Allow horizontal scroll if items overflow */
+        overflow-y: hidden; /* Hide vertical scroll */
+        -webkit-overflow-scrolling: touch;
+        box-shadow: 0 2px 8px var(--shadow-color); /* Shadow at the bottom */
+        transition: max-height 0.3s ease; /* Smooth collapse animation */
+    }
+
+     .sidebar.expanded { /* Class to expand sidebar (managed by JS) */
+        max-height: 80vh; /* Allow it to expand */
+        flex-direction: column;
+        align-items: flex-start;
+        overflow-y: auto; /* Enable vertical scroll when expanded */
+        padding: 15px;
+     }
+
+
+     .sidebar-header {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding: 0;
+        flex-shrink: 0;
+        width: auto; /* Don't take full width in row layout */
+     }
+      .sidebar.expanded .sidebar-header {
+          width: 100%; /* Full width when expanded */
+          border-bottom: 1px solid var(--border-color);
+          margin-bottom: 15px;
+          text-align: center;
+      }
+
+
+    .app-title {
+        margin-bottom: 0; /* Remove margin in collapsed state */
+        font-size: 1.5em; /* Smaller title on mobile */
+    }
+     .sidebar.expanded .app-title {
+         margin-bottom: 15px; /* Restore margin when expanded */
+     }
+
+
+     .new-chat-button {
+        width: auto; /* Auto width in collapsed state */
+        margin-inline-start: 10px;
+        font-size: 0.9em; /* Smaller font */
+        padding: 8px 12px; /* Smaller padding */
+     }
+      .sidebar.expanded .new-chat-button {
+         width: 100%; /* Full width when expanded */
+         margin-inline-start: 0;
+         font-size: 1em;
+         padding: 12px;
+      }
+
+
+    /* Hide chat list and footer in collapsed state */
+     .sidebar .chat-list,
+     .sidebar .sidebar-footer {
+        display: none;
+     }
+      .sidebar.expanded .chat-list,
+      .sidebar.expanded .sidebar-footer {
+         display: flex; /* Show when expanded */
+         flex-direction: column; /* Stack vertically */
+         width: 100%; /* Take full width */
+      }
+
+
+    .main-content {
+        height: calc(100vh - 60px); /* Adjust height based on collapsed sidebar height */
+        padding-top: 0; /* Remove top padding */
+    }
+
+     .chat-area {
+         padding: 15px; /* Smaller padding */
+         padding-bottom: 140px; /* Adjust for smaller input wrapper height */
+     }
+
+    .input-area-wrapper {
+         padding: 15px; /* Smaller padding */
+    }
+
+    .input-area {
+         max-width: 100%; /* Allow input to take full width */
+         border-radius: 25px; /* Slightly less rounded */
+         padding: 6px 12px;
+    }
+
+    .message-bubble {
+         max-width: 85%; /* Allow bubbles to be wider */
+         padding: 10px 15px;
+         border-radius: 15px; /* Slightly less rounded */
+    }
+
+    .message-avatar {
+        width: 30px; /* Smaller avatar */
+        height: 30px;
+         margin-inline-end: 10px;
+    }
+
+     body[dir="rtl"] .message-avatar {
+         margin-inline-start: 10px;
+     }
+      body[dir="rtl"] .input-area textarea {
+         margin-inline-start: 8px; /* Adjust space */
+      }
+
+     /* Adjust mobile RTL bubble corners */
+    body[dir="rtl"] .user-message .message-bubble {
+        border-bottom-inline-end-radius: 15px;
+        border-bottom-inline-start-radius: 5px;
+    }
+
+    body[dir="rtl"] .ai-message .message-bubble {
+        border-bottom-inline-start-radius: 15px;
+        border-bottom-inline-end-radius: 5px;
+    }
+
+}
+
+/* Add a toggle button for sidebar on small screens (Needs JS to show/hide) */
+/* You would add this button in index.html and style it here */
+/* Example:
+.sidebar-toggle-button {
+    display: none; // Hide by default
+    position: fixed;
+    top: 10px;
+    left: 10px; // Adjust for RTL
+    z-index: 100;
+    // Add styling
+}
+@media (max-width: 768px) {
+    .sidebar-toggle-button {
+        display: block; // Show on small screens
+    }
+}
+*/
