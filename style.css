@@ -6,32 +6,36 @@
 }
 
 body {
-    font-family: 'Vazirmatn', sans-serif; /* Default Persian Font */
-    line-height: 1.7; /* Slightly increased line height for readability */
-    transition: background-color 0.5s ease, color 0.5s ease; /* Smoother theme transition */
-    color: var(--text-color); /* Apply text color from variables */
-    background-color: var(--bg-color); /* Apply background color from variables */
-    overflow: hidden; /* Prevent body scroll, let container handle it */
+    font-family: 'Vazirmatn', sans-serif;
+    line-height: 1.7;
+    transition: background-color 0.5s ease, color 0.5s ease;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    overflow: hidden;
+    direction: var(--dir, rtl);
+    text-align: var(--text-align, right);
 }
 
 /* CSS Variables for Themes - More refined colors */
 :root {
-    /* Light Mode Colors (inspired by coffee, clean UI) */
-    --light-bg: #f4f0eb; /* Warm light background */
-    --light-text: #3d3a36; /* Dark coffee text */
-    --light-sidebar-bg: #e2ddd7; /* Lighter coffee tone sidebar */
-    --light-sidebar-text: #5f5b57; /* Medium coffee text */
-    --light-input-bg: #ffffff; /* Pure white input */
-    --light-input-border: #c0bdb8; /* Subtle border */
-    --light-button-bg: linear-gradient(45deg, #ff9800, #f57c00); /* Orange gradient */
+    /* Light Mode Colors */
+    --light-bg: #f4f0eb;
+    --light-text: #3d3a36;
+    --light-sidebar-bg: #e2ddd7;
+    --light-sidebar-text: #5f5b57;
+    --light-input-bg: #ffffff;
+    --light-input-border: #c0bdb8;
+    --light-button-bg: linear-gradient(45deg, #ff9800, #f57c00);
     --light-button-text: #ffffff;
-    --light-chat-bubble-user-bg: linear-gradient(45deg, #007bff, #0056b3); /* Blue gradient */
+    --light-chat-bubble-user-bg: linear-gradient(45deg, #007bff, #0056b3);
     --light-chat-bubble-user-text: #ffffff;
-    --light-chat-bubble-ai-bg: #ffffff; /* White bubble */
-    --light-chat-bubble-ai-text: #3d3a36; /* Dark text */
-    --light-border-color: #d0cdca; /* Divider color */
-    --light-hover-bg: #cdc8c2; /* Subtle hover background */
-    --light-active-bg: #bab5b0; /* Active background */
+    --light-chat-bubble-ai-bg: #ffffff;
+    --light-chat-bubble-ai-text: #3d3a36;
+    --light-chat-bubble-error-bg: #ffcccc;
+    --light-chat-bubble-error-text: #cc0000;
+    --light-border-color: #d0cdca;
+    --light-hover-bg: #cdc8c2;
+    --light-active-bg: #bab5b0;
     --light-scrollbar-thumb: #a8a39e;
     --light-scrollbar-track: #e2ddd7;
     --light-shadow-color: rgba(0, 0, 0, 0.1);
@@ -50,6 +54,8 @@ body.light-mode {
     --chat-bubble-user-text: var(--light-chat-bubble-user-text);
     --chat-bubble-ai-bg: var(--light-chat-bubble-ai-bg);
     --chat-bubble-ai-text: var(--light-chat-bubble-ai-text);
+    --chat-bubble-error-bg: var(--light-chat-bubble-error-bg);
+    --chat-bubble-error-text: var(--light-chat-bubble-error-text);
     --border-color: var(--light-border-color);
     --hover-bg: var(--light-hover-bg);
     --active-bg: var(--light-active-bg);
@@ -58,26 +64,28 @@ body.light-mode {
     --shadow-color: var(--light-shadow-color);
 }
 
-/* Dark Mode Colors (inspired by dark mode coffee shops) */
+/* Dark Mode Colors */
 :root {
-    --dark-bg: #2c2b29; /* Dark coffee background */
-    --dark-text: #ece8e4; /* Light text */
-    --dark-sidebar-bg: #1e1d1c; /* Very dark sidebar */
-    --dark-sidebar-text: #b5b0ab; /* Muted text */
-    --dark-input-bg: #3a3937; /* Slightly lighter dark input */
-    --dark-input-border: #4d4b49; /* Subtle border */
-    --dark-button-bg: linear-gradient(45deg, #ff9800, #f57c00); /* Same orange gradient */
+    --dark-bg: #2c2b29;
+    --dark-text: #ece8e4;
+    --dark-sidebar-bg: #1e1d1c;
+    --dark-sidebar-text: #b5b0ab;
+    --dark-input-bg: #3a3937;
+    --dark-input-border: #4d4b49;
+    --dark-button-bg: linear-gradient(45deg, #ff9800, #f57c00);
     --dark-button-text: #ffffff;
-    --dark-chat-bubble-user-bg: linear-gradient(45deg, #565869, #40414f); /* Darker blue/grey gradient */
+    --dark-chat-bubble-user-bg: linear-gradient(45deg, #565869, #40414f);
     --dark-chat-bubble-user-text: #ece8e4;
-    --dark-chat-bubble-ai-bg: #3a3937; /* AI bubble matches input */
+    --dark-chat-bubble-ai-bg: #3a3937;
     --dark-chat-bubble-ai-text: #ece8e4;
-    --dark-border-color: #4d4b49; /* Divider color */
-    --dark-hover-bg: #3a3937; /* Slightly lighter dark hover */
-    --dark-active-bg: #4d4b49; /* Active background */
+    --dark-chat-bubble-error-bg: #5d3030;
+    --dark-chat-bubble-error-text: #ffcccc;
+    --dark-border-color: #4d4b49;
+    --dark-hover-bg: #3a3937;
+    --dark-active-bg: #4d4b49;
     --dark-scrollbar-thumb: #5a5957;
     --dark-scrollbar-track: #2c2b29;
-    --dark-shadow-color: rgba(0, 0, 0, 0.3);
+    --shadow-color: var(--dark-shadow-color);
 }
 
 body.dark-mode {
@@ -93,12 +101,14 @@ body.dark-mode {
     --chat-bubble-user-text: var(--dark-chat-bubble-user-text);
     --chat-bubble-ai-bg: var(--dark-chat-bubble-ai-bg);
     --chat-bubble-ai-text: var(--dark-chat-bubble-ai-text);
+    --chat-bubble-error-bg: var(--dark-chat-bubble-error-bg);
+    --chat-bubble-error-text: var(--dark-chat-bubble-error-text);
     --border-color: var(--dark-border-color);
     --hover-bg: var(--dark-hover-bg);
     --active-bg: var(--dark-active-bg);
     --scrollbar-thumb: var(--dark-scrollbar-thumb);
     --scrollbar-track: var(--dark-scrollbar-track);
-     --shadow-color: var(--dark-shadow-color);
+    --shadow-color: var(--dark-shadow-color);
 }
 
 
@@ -106,30 +116,31 @@ body.dark-mode {
 .container {
     display: flex;
     height: 100vh;
-    width: 100vw; /* Use full viewport width */
+    width: 100vw;
+    overflow: hidden;
 }
 
 /* Sidebar Styling */
 .sidebar {
-    width: 280px; /* Slightly wider sidebar */
+    width: 280px;
     background-color: var(--sidebar-bg);
     color: var(--sidebar-text);
     display: flex;
     flex-direction: column;
-    padding: 15px; /* Increased padding */
+    padding: 15px;
     border-inline-end: 1px solid var(--border-color);
     overflow-y: auto;
     flex-shrink: 0;
-    transition: width 0.3s ease; /* Smooth sidebar resize if implemented */
-    box-shadow: 2px 0 8px var(--shadow-color); /* Subtle shadow */
+    transition: width 0.3s ease, transform 0.3s ease;
+    box-shadow: 2px 0 8px var(--shadow-color);
 }
 
-/* Custom Scrollbar - More refined */
+/* Custom Scrollbar */
 .sidebar::-webkit-scrollbar,
 .chat-area::-webkit-scrollbar,
 .input-area textarea::-webkit-scrollbar {
-    width: 8px; /* Standard width */
-    height: 8px; /* For horizontal if needed */
+    width: 8px;
+    height: 8px;
 }
 
 .sidebar::-webkit-scrollbar-track,
@@ -150,54 +161,53 @@ body.dark-mode {
 .sidebar::-webkit-scrollbar-thumb:hover,
 .chat-area::-webkit-scrollbar-thumb:hover,
 .input-area textarea::-webkit-scrollbar-thumb:hover {
-    background: #888; /* Darker on hover */
+    background: #888;
 }
 
 
 .sidebar-header {
     padding-bottom: 15px;
-    text-align: center;
+    text-align: var(--text-align, right);
     border-bottom: 1px solid var(--border-color);
     margin-bottom: 15px;
 }
 
 .app-title {
-    font-size: 1.8em; /* Larger title */
-    font-weight: 700; /* Bold font */
+    font-size: 1.8em;
+    font-weight: 700;
     margin-bottom: 15px;
-    color: var(--text-color); /* Use main text color */
-    /* Add a subtle text shadow or gradient if desired */
-    /* text-shadow: 1px 1px 3px rgba(0,0,0,0.1); */
+    color: var(--text-color);
+    text-align: center;
 }
 
 
 .new-chat-button {
     width: 100%;
-    padding: 12px; /* Increased padding */
-    background-color: var(--button-bg); /* Use gradient variable */
+    padding: 12px;
+    background-color: var(--button-bg);
     color: var(--button-text);
-    border: none; /* Remove border */
-    border-radius: 25px; /* More rounded */
+    border: none;
+    border-radius: 25px;
     cursor: pointer;
     font-size: 1em;
     font-weight: 600;
-    transition: all 0.3s ease; /* Smooth transition for all changes */
+    transition: all 0.3s ease;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px; /* Space between icon and text */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    gap: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .new-chat-button:hover {
-    opacity: 0.9; /* Slight transparency on hover */
-    transform: translateY(-2px); /* Slight lift effect */
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
 }
 
 .new-chat-button:active {
-    transform: translateY(0); /* Press down effect */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Smaller shadow when pressed */
+    transform: translateY(0);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -207,48 +217,50 @@ body.dark-mode {
 }
 
 .chat-item {
-    padding: 12px 10px; /* Increased padding */
-    margin-bottom: 8px; /* Increased margin */
-    border-radius: 8px; /* Rounded corners */
+    padding: 12px 10px;
+    margin-bottom: 8px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.1s ease;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: flex; /* Use flex for icon/title alignment */
+    display: flex;
     align-items: center;
-    gap: 8px; /* Space between icon and title */
+    gap: 8px;
 }
 
 .chat-item .chat-icon {
-    flex-shrink: 0; /* Prevent icon shrinking */
+    flex-shrink: 0;
     font-size: 1.1em;
 }
 
 .chat-item .chat-title {
-     flex-grow: 1; /* Allow title to take space */
+     flex-grow: 1;
      overflow: hidden;
      text-overflow: ellipsis;
+     text-align: var(--text-align, right);
 }
 
 
 .chat-item:hover {
     background-color: var(--hover-bg);
-    transform: translateX(5px); /* Slight slide effect on hover */
+    transform: translateX(5px);
 }
 
 .chat-item.active {
     background-color: var(--active-bg);
-    font-weight: 600; /* Semi-bold for active */
-    color: var(--text-color); /* Use main text color */
+    font-weight: 600;
+    color: var(--text-color);
 }
 
 .sidebar-footer {
     padding-top: 15px;
     border-top: 1px solid var(--border-color);
     display: flex;
-    flex-direction: column;
-    gap: 12px; /* Increased space */
+    flex-direction: column; /* Stack items vertically */
+    gap: 12px; /* Space between buttons and logo section */
+    align-items: center; /* Center items horizontally in column layout */
 }
 
 .sidebar-footer button {
@@ -259,23 +271,25 @@ body.dark-mode {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    text-align: start;
+    text-align: var(--text-align, right);
     transition: background-color 0.2s ease, color 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 10px; /* Space between icon and text */
+    gap: 10px;
     font-size: 1em;
 }
 
 .sidebar-footer button .icon {
     flex-shrink: 0;
-    font-size: 1.3em; /* Slightly larger icon */
-    margin-inline-end: 0; /* Remove margin as gap is used */
+    font-size: 1.3em;
 }
+body[dir="rtl"] .sidebar-footer button .icon { margin-left: 10px; margin-right: 0; }
+body[dir="ltr"] .sidebar-footer button .icon { margin-right: 10px; margin-left: 0; }
+
 
 .sidebar-footer button:hover {
     background-color: var(--hover-bg);
-    color: var(--text-color); /* Brighter text on hover */
+    color: var(--text-color);
 }
 
 
@@ -286,6 +300,7 @@ body.dark-mode {
     flex-direction: column;
     position: relative;
     background-color: var(--bg-color);
+    overflow: hidden;
 }
 
 .chat-area {
@@ -294,22 +309,26 @@ body.dark-mode {
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Increased space between messages */
-    /* Adjust padding at the bottom for the input area wrapper */
-    padding-bottom: 150px; /* Needs to be taller than input-area-wrapper height */
+    gap: 20px;
+    /* IMPORTANT: Adjusted padding bottom to only make space for the input area wrapper now */
+    /* Input area wrapper height is roughly 120-140px. Add some buffer. */
+    padding-bottom: 160px; /* Reduced padding */
 }
 
 .message {
     display: flex;
     align-items: flex-start;
-    opacity: 0; /* Start hidden for animation */
-    transform: translateY(20px); /* Start slightly below for animation */
-    animation: fadeInUp 0.5s ease-out forwards; /* Apply fade-in animation */
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.5s ease-out forwards;
+    flex-direction: var(--flex-direction, row-reverse);
+}
+body[dir="ltr"] .message {
+    flex-direction: row;
 }
 
-/* Add a delay for subsequent messages */
-.chat-area .message:nth-child(n+2) { /* Apply delay starting from the 2nd message */
-     animation-delay: calc((var(--message-index, 1) - 1) * 0.1s); /* Use JS variable for dynamic delay */
+.chat-area .message:nth-child(n+2) {
+     animation-delay: calc((var(--message-index, 1) - 1) * 0.08s);
 }
 
 @keyframes fadeInUp {
@@ -319,68 +338,86 @@ body.dark-mode {
     }
 }
 
-
 .message-avatar {
-    width: 35px; /* Slightly larger avatar */
+    width: 35px;
     height: 35px;
     border-radius: 50%;
-    background-color: #ff9800; /* Cofe Code color */
+    background-color: #ff9800;
     color: #fff;
     display: flex;
     justify-content: center;
     align-items: center;
     font-weight: bold;
     flex-shrink: 0;
-    margin-inline-end: 15px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    overflow: hidden; /* Clip content just in case */
-    font-size: 0.9em; /* Adjust text size in avatar */
+    overflow: hidden;
+    font-size: 0.9em;
 }
+body[dir="rtl"] .message-avatar { margin-left: 15px; margin-right: 0; }
+body[dir="ltr"] .message-avatar { margin-right: 15px; margin-left: 0; }
 
 .user-message .message-avatar {
-     background-color: #007bff; /* User avatar color */
+     background-color: #007bff;
 }
 
 .message-bubble {
-    max-width: 75%; /* Slightly wider bubble */
-    padding: 12px 18px; /* Increased padding */
-    border-radius: 20px; /* More rounded corners */
+    max-width: 75%;
+    padding: 12px 18px;
+    border-radius: 20px;
     word-wrap: break-word;
     white-space: pre-wrap;
-    line-height: 1.6; /* Comfortable line height */
-    filter: brightness(100%); /* Ensure brightness is normal before potential animation */
-    transition: filter 0.3s ease; /* Smooth transition for potential effects */
+    line-height: 1.6;
+    filter: brightness(100%);
+    transition: filter 0.3s ease;
 }
 
 .user-message .message-bubble {
-    background: var(--chat-bubble-user-bg); /* Use gradient */
+    background: var(--chat-bubble-user-bg);
     color: var(--chat-bubble-user-text);
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2); /* Subtle shadow */
-    border-bottom-inline-end-radius: 5px; /* Slightly less rounded corner on the bottom side next to avatar */
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
 }
+body[dir="rtl"] .user-message .message-bubble { border-bottom-left-radius: 5px; }
+body[dir="ltr"] .user-message .message-bubble { border-bottom-right-radius: 5px; }
+
 
 .ai-message .message-bubble {
     background: var(--chat-bubble-ai-bg);
     color: var(--chat-bubble-ai-text);
-     box-shadow: 0 3px 8px rgba(0,0,0,0.1); /* Subtle shadow */
-     border-bottom-inline-start-radius: 5px; /* Slightly less rounded corner on the bottom side next to avatar */
+     box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+body[dir="rtl"] .ai-message .message-bubble { border-bottom-right-radius: 5px; }
+body[dir="ltr"] .ai-message .message-bubble { border-bottom-left-radius: 5px; }
+
+/* Error Message Styling */
+.error-message .message-bubble {
+    background: var(--chat-bubble-error-bg);
+    color: var(--chat-bubble-error-text);
+    border: 1px solid var(--chat-bubble-error-text);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0 3px 8px rgba(255, 0, 0, 0.2);
+}
+.error-message .message-avatar {
+    background-color: #cc0000;
 }
 
 
 /* Typing Indicator Animation */
 .typing-indicator .message-bubble {
-    background: var(--chat-bubble-ai-bg); /* Same as AI bubble */
+    background: var(--chat-bubble-ai-bg);
     display: flex;
     align-items: center;
-    gap: 5px; /* Space between dots */
-    min-width: 50px; /* Ensure it's visible */
-    box-shadow: none; /* No shadow for typing indicator */
+    gap: 5px;
+    min-width: 50px;
+    box-shadow: none;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
 }
 
 .typing-indicator .dot {
     width: 8px;
     height: 8px;
-    background-color: var(--chat-bubble-ai-text); /* Dot color */
+    background-color: var(--chat-bubble-ai-text);
     border-radius: 50%;
     animation: pulse 1.4s infinite ease-in-out both;
 }
@@ -395,6 +432,35 @@ body.dark-mode {
 }
 
 
+/* Logo Section Styling START - Moved inside sidebar-footer */
+.logo-section {
+    display: flex;
+     /* Stack logos vertically in sidebar */
+    justify-content: center; /* Center the logos within the column */
+    align-items: center; /* Center items horizontally in column */
+    padding: 20px 0 0 0; /* Add padding above, no side padding needed */
+    margin-top: 15px; /* Add space above the section */
+    flex-wrap: nowrap;
+    border-top: 1px solid var(--border-color); /* Optional separator line */
+    gap: 12px; /* Space between stacked logos */
+    background-color: transparent; /* Background is handled by sidebar-footer */
+    flex-shrink: 0;
+}
+
+.logo-section .partner-logo {
+    max-width: 50px; /* Adjust max-width to fit sidebar */
+    height: auto;
+    opacity: 0.7;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.logo-section .partner-logo:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
+/* Logo Section Styling END */
+
+
 /* Input Area Wrapper Styling */
 .input-area-wrapper {
     position: absolute;
@@ -402,41 +468,36 @@ body.dark-mode {
     left: 0;
     right: 0;
     padding: 20px;
-    background: var(--bg-color); /* Match background */
-    /* Optional: Add a gradient fade or backdrop filter for beauty */
-    /* background: linear-gradient(to top, var(--bg-color) 70%, transparent); */
-    /* backdrop-filter: blur(5px); */
-    /* -webkit-backdrop-filter: blur(5px); */
-    box-shadow: 0 -8px 15px var(--shadow-color); /* More prominent shadow */
+    background: var(--bg-color);
+    box-shadow: 0 -8px 15px var(--shadow-color);
     z-index: 10; /* Ensure it's above chat messages */
 }
 
 
 .input-area {
     display: flex;
-    align-items: flex-end; /* Align items to the bottom for multi-line textarea */
-    max-width: 800px; /* Limit input width */
-    margin: 0 auto; /* Center the input area */
+    align-items: flex-end;
+    max-width: 800px;
+    margin: 0 auto;
     background-color: var(--input-bg);
     border: 1px solid var(--input-border);
-    border-radius: 28px; /* Very rounded */
-    padding: 8px 15px; /* Padding inside the input container */
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Subtle shadow */
+    border-radius: 28px;
+    padding: 8px 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     transition: box-shadow 0.3s ease;
 }
 
-.input-area:focus-within { /* Apply styles when children (textarea) are focused */
-    box-shadow: 0 2px 15px rgba(0, 123, 255, 0.3); /* Glow on focus */
+.input-area:focus-within {
+    box-shadow: 0 2px 15px rgba(0, 123, 255, 0.3);
     border-color: #007bff;
 }
 
 
 .input-area textarea {
     flex-grow: 1;
-    padding: 8px 0; /* Padding already handled by parent */
-    margin-inline-end: 10px; /* Space before button */
-    border: none; /* No border needed here */
-    background-color: transparent; /* Transparent background */
+    padding: 8px 0;
+    border: none;
+    background-color: transparent;
     color: var(--text-color);
     resize: none;
     font-family: inherit;
@@ -444,22 +505,24 @@ body.dark-mode {
     line-height: 1.6;
     max-height: 150px;
     overflow-y: auto;
-    outline: none; /* Remove default outline */
+    outline: none;
 }
+body[dir="rtl"] .input-area textarea { margin-left: 10px; margin-right: 0; }
+body[dir="ltr"] .input-area textarea { margin-right: 10px; margin-left: 0; }
 
 
 .input-area button {
-    padding: 10px; /* Square button for icon */
-    background-color: var(--button-bg); /* Use gradient */
+    padding: 10px;
+    background-color: var(--button-bg);
     color: var(--button-text);
     border: none;
-    border-radius: 50%; /* Circular button */
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 1.2em; /* Larger icon */
+    font-size: 1.2em;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-shrink: 0; /* Prevent shrinking */
+    flex-shrink: 0;
     transition: opacity 0.2s ease, transform 0.1s ease, background-color 0.2s ease;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
@@ -469,59 +532,73 @@ body.dark-mode {
 }
 
 .input-area button:active {
-    transform: scale(0.9); /* More pronounced press effect */
+    transform: scale(0.9);
 }
 
 .input-area button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    background: #ccc; /* Grey out when disabled */
+    background: #ccc;
     box-shadow: none;
 }
 
 
 .disclaimer {
-    margin-top: 10px; /* Space above disclaimer */
+    margin-top: 10px;
     text-align: center;
     font-size: 0.8em;
     color: var(--sidebar-text);
 }
 
 
-/* ---------- RTL Support for CSS ---------- */
+/* ---------- Direction (RTL/LTR) Specific Styles ---------- */
+body[dir="rtl"] {
+    --dir: rtl;
+    --text-align: right;
+    --flex-direction: row-reverse;
+}
+body[dir="ltr"] {
+    --dir: ltr;
+    --text-align: left;
+    --flex-direction: row;
+}
+
 body[dir="rtl"] .sidebar {
     border-inline-end: none;
     border-inline-start: 1px solid var(--border-color);
-    box-shadow: -2px 0 8px var(--shadow-color); /* Shadow on the left */
+    box-shadow: -2px 0 8px var(--shadow-color);
 }
 
-body[dir="rtl"] .message-avatar {
-     margin-inline-end: 0;
-     margin-inline-start: 15px;
+
+/* Sidebar Toggle Button Styling (Optional) */
+.sidebar-toggle-button {
+    display: none;
+    position: fixed;
+    top: 15px;
+    left: var(--sidebar-toggle-left, 15px);
+    right: var(--sidebar-toggle-right, auto);
+    z-index: 100;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+body[dir="rtl"] .sidebar-toggle-button {
+    --sidebar-toggle-left: auto;
+    --sidebar-toggle-right: 15px;
 }
 
-body[dir="rtl"] .sidebar-footer button .icon {
-    margin-inline-end: 0;
-    margin-inline-start: 10px;
+.sidebar-toggle-button:hover {
+    background-color: var(--hover-bg);
+    color: var(--text-color);
 }
 
-body[dir="rtl"] .input-area textarea {
-    margin-inline-end: 0;
-    margin-inline-start: 10px;
-}
 
-/* Adjust bubble corners for RTL */
-body[dir="rtl"] .user-message .message-bubble {
-     border-bottom-inline-end-radius: 20px; /* Revert this corner */
-     border-bottom-inline-start-radius: 5px; /* Make this corner less rounded */
-}
-
-body[dir="rtl"] .ai-message .message-bubble {
-     border-bottom-inline-start-radius: 20px; /* Revert this corner */
-     border-bottom-inline-end-radius: 5px; /* Make this corner less rounded */
-}
-
-/* ---------- Responsive Design Considerations (Improved) ---------- */
+/* ---------- Responsive Design Considerations ---------- */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;
@@ -530,146 +607,157 @@ body[dir="rtl"] .ai-message .message-bubble {
     .sidebar {
         width: 100%;
         height: auto;
-        max-height: 60px; /* Collapse sidebar */
+        max-height: 60px; /* Collapsed height */
         border-inline-end: none;
         border-bottom: 1px solid var(--border-color);
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
         padding: 10px 15px;
-        overflow-x: auto; /* Allow horizontal scroll if items overflow */
-        overflow-y: hidden; /* Hide vertical scroll */
+        overflow-x: auto;
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
-        box-shadow: 0 2px 8px var(--shadow-color); /* Shadow at the bottom */
-        transition: max-height 0.3s ease; /* Smooth collapse animation */
+        box-shadow: 0 2px 8px var(--shadow-color);
+        transition: max-height 0.3s ease, padding 0.3s ease;
     }
 
-     .sidebar.expanded { /* Class to expand sidebar (managed by JS) */
-        max-height: 80vh; /* Allow it to expand */
+     .sidebar.expanded {
+        max-height: 80vh;
         flex-direction: column;
         align-items: flex-start;
-        overflow-y: auto; /* Enable vertical scroll when expanded */
+        overflow-y: auto;
         padding: 15px;
      }
-
 
      .sidebar-header {
         border-bottom: none;
         margin-bottom: 0;
         padding: 0;
         flex-shrink: 0;
-        width: auto; /* Don't take full width in row layout */
+        width: auto;
+        text-align: var(--text-align, right);
      }
       .sidebar.expanded .sidebar-header {
-          width: 100%; /* Full width when expanded */
+          width: 100%;
           border-bottom: 1px solid var(--border-color);
           margin-bottom: 15px;
           text-align: center;
       }
 
-
     .app-title {
-        margin-bottom: 0; /* Remove margin in collapsed state */
-        font-size: 1.5em; /* Smaller title on mobile */
+        margin-bottom: 0;
+        font-size: 1.5em;
     }
      .sidebar.expanded .app-title {
-         margin-bottom: 15px; /* Restore margin when expanded */
+         margin-bottom: 15px;
+         text-align: center;
      }
-
 
      .new-chat-button {
-        width: auto; /* Auto width in collapsed state */
+        width: auto;
         margin-inline-start: 10px;
-        font-size: 0.9em; /* Smaller font */
-        padding: 8px 12px; /* Smaller padding */
+        font-size: 0.9em;
+        padding: 8px 12px;
      }
       .sidebar.expanded .new-chat-button {
-         width: 100%; /* Full width when expanded */
+         width: 100%;
          margin-inline-start: 0;
          font-size: 1em;
          padding: 12px;
       }
 
-
-    /* Hide chat list and footer in collapsed state */
-     .sidebar .chat-list,
-     .sidebar .sidebar-footer {
-        display: none;
+    .sidebar .chat-list,
+    .sidebar .sidebar-footer {
+        display: none; /* Hide sidebar footer contents in collapsed mobile state */
+    }
+     .sidebar.expanded .chat-list,
+     .sidebar.expanded .sidebar-footer {
+        display: flex; /* Show when expanded */
+        flex-direction: column; /* Stack items vertically */
+        width: 100%; /* Take full width */
+        align-items: center; /* Center items horizontally */
      }
-      .sidebar.expanded .chat-list,
-      .sidebar.expanded .sidebar-footer {
-         display: flex; /* Show when expanded */
-         flex-direction: column; /* Stack vertically */
-         width: 100%; /* Take full width */
-      }
-
 
     .main-content {
-        height: calc(100vh - 60px); /* Adjust height based on collapsed sidebar height */
-        padding-top: 0; /* Remove top padding */
+        height: calc(100vh - 60px);
+        padding-top: 0;
     }
 
-     .chat-area {
-         padding: 15px; /* Smaller padding */
-         padding-bottom: 140px; /* Adjust for smaller input wrapper height */
-     }
+    .chat-area {
+        padding: 15px;
+        /* Adjusted padding bottom for mobile input area only */
+        padding-bottom: 180px; /* Sufficient space for input area wrapper */
+    }
+
+    /* Logo Section Mobile */
+    /* Styles for .logo-section inside expanded sidebar on mobile */
+    .sidebar.expanded .logo-section {
+         /* Already stacked vertically by sidebar-footer flex-direction column */
+         flex-direction: column; /* Ensure explicit stacking */
+         padding: 15px 0 0 0; /* Adjusted padding for mobile sidebar */
+         margin-top: 15px; /* Maintain space */
+         border-top: 1px solid var(--border-color); /* Maintain separator */
+         gap: 15px;
+         width: 100%; /* Take full width of expanded sidebar */
+    }
+    .sidebar.expanded .logo-section .partner-logo {
+         max-width: 80px; /* Smaller logos in mobile sidebar */
+    }
+
 
     .input-area-wrapper {
-         padding: 15px; /* Smaller padding */
+         position: absolute;
+         bottom: 0;
+         left: 0;
+         right: 0;
+         padding: 15px;
     }
 
     .input-area {
-         max-width: 100%; /* Allow input to take full width */
-         border-radius: 25px; /* Slightly less rounded */
+         max-width: 100%;
+         border-radius: 25px;
          padding: 6px 12px;
     }
 
     .message-bubble {
-         max-width: 85%; /* Allow bubbles to be wider */
+         max-width: 85%;
          padding: 10px 15px;
-         border-radius: 15px; /* Slightly less rounded */
+         border-radius: 15px;
     }
 
     .message-avatar {
-        width: 30px; /* Smaller avatar */
+        width: 30px;
         height: 30px;
-         margin-inline-end: 10px;
     }
+    body[dir="rtl"] .message-avatar { margin-left: 10px; margin-right: 0; }
+    body[dir="ltr"] .message-avatar { margin-right: 10px; margin-left: 0; }
 
-     body[dir="rtl"] .message-avatar {
-         margin-inline-start: 10px;
-     }
-      body[dir="rtl"] .input-area textarea {
-         margin-inline-start: 8px; /* Adjust space */
-      }
 
-     /* Adjust mobile RTL bubble corners */
+    /* Adjust mobile bubble corners based on direction */
     body[dir="rtl"] .user-message .message-bubble {
-        border-bottom-inline-end-radius: 15px;
-        border-bottom-inline-start-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 15px;
     }
-
+    body[dir="ltr"] .user-message .message-bubble {
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 15px;
+    }
     body[dir="rtl"] .ai-message .message-bubble {
-        border-bottom-inline-start-radius: 15px;
-        border-bottom-inline-end-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 15px;
+    }
+    body[dir="ltr"] .ai-message .message-bubble {
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 15px;
+    }
+     /* Error bubbles look the same on mobile */
+    .error-message .message-bubble {
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
     }
 
-}
-
-/* Add a toggle button for sidebar on small screens (Needs JS to show/hide) */
-/* You would add this button in index.html and style it here */
-/* Example:
-.sidebar-toggle-button {
-    display: none; // Hide by default
-    position: fixed;
-    top: 10px;
-    left: 10px; // Adjust for RTL
-    z-index: 100;
-    // Add styling
-}
-@media (max-width: 768px) {
+    /* Show toggle button on small screens */
     .sidebar-toggle-button {
-        display: block; // Show on small screens
+        display: block;
     }
 }
-*/
